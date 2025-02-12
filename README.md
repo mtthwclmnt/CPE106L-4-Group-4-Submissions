@@ -4,6 +4,6 @@ Leader:
 CLEMENTE, Brian Matthew E. (2023180065)
 
 Members:
-ACANTILADO, Angelica
-DYTIANQUIN, Chalzea C. 
-SAMIA, Vance David G.
+ACANTILADO, Maria Angelica (2021137068)
+DYTIANQUIN, Chalzea Fransen C. (2023104582)
+SAMIA, Vance David G. (2023102317)
