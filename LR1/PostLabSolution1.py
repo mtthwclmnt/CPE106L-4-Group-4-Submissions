@@ -1,4 +1,6 @@
-#CHALZEA FRANSEN C. DYTIANQUIN
+
+# CHALZEA FRANSEN C. DYTIANQUIN
+
 def median(li):
     li.sort()
     if len(li) % 2 == 0:
@@ -21,6 +23,7 @@ def mode(li):
     return mode1
 
 # Input for the number of values
+print("\n")  # Space before first section
 num_values = int(input('How many values do you want to enter? '))
 
 li = []
@@ -29,14 +32,15 @@ for i in range(num_values):
     li.append(int(input('Enter a value for the list: ')))
 
 # Output the results
-print("List:", li)
+print("\nList:", li)
 print("Mode:", mode(li))
 print("Median:", median(li))
 print("Mean:", mean(li))
 
 #--------------------------------------------------------------------------------------------------------------------#
 
-#VANCE DAVID G. SAMIA
+# VANCE DAVID G. SAMIA
+
 def mean(numbers):
     """Compute the mean of a list of numbers."""
     if not numbers:
@@ -51,10 +55,8 @@ def median(numbers):
     n = len(sorted_numbers)
     mid = n // 2
     if n % 2 == 0:
-        # If even, return the average of the two middle numbers
         return (sorted_numbers[mid - 1] + sorted_numbers[mid]) / 2
     else:
-        # If odd, return the middle number
         return sorted_numbers[mid]
 
 def mode(numbers):
@@ -67,14 +69,13 @@ def mode(numbers):
     max_freq = max(frequency.values())
     modes = [num for num, freq in frequency.items() if freq == max_freq]
     if len(modes) == len(numbers):
-        # All numbers appear with the same frequency (no mode)
-        return None
+        return None  # No mode if all numbers appear equally
     return modes[0]  # Return the first mode if there are multiple
 
 def get_user_input():
     """Get the size of the list and individual values from the user."""
     numbers = []
-    size = int(input("Enter the size of the list: "))
+    size = int(input("\nEnter the size of the list: "))  # Space before second section
     for i in range(size):
         value = float(input(f"Enter value {i + 1}: "))
         numbers.append(value)
@@ -83,13 +84,13 @@ def get_user_input():
 # Example usage with user input
 if __name__ == "__main__":
     user_numbers = get_user_input()
-    print("Mean:", mean(user_numbers))
+    print("\nMean:", mean(user_numbers))
     print("Median:", median(user_numbers))
     print("Mode:", mode(user_numbers))
 
 #--------------------------------------------------------------------------------------------------------------------#
 
-#MARIA ANGELICA ACANTILADO
+# MARIA ANGELICA ACANTILADO
 
 def mean(numbers):
     """Compute the mean of a list of numbers."""
@@ -123,7 +124,7 @@ def enhanced_mode(numbers):
     return modes if len(modes) > 1 else modes[0]  # Return list if multiple, else single mode
 
 # Get user input
-num_values = int(input("How many values do you want to enter? "))
+num_values = int(input("\nHow many values do you want to enter? "))  # Space before third section
 
 numbers = []
 for i in range(1, num_values + 1):
@@ -139,7 +140,7 @@ for i in range(1, num_values + 1):
     numbers.append(value)
 
 # Display results
-print("=" * 28)
+print("\n" + "=" * 28)
 print("Mean:", mean(numbers))
 print("Median:", median(numbers))
 print("Mode:", enhanced_mode(numbers))
