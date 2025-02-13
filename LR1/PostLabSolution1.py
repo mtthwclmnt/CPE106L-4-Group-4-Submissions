@@ -86,3 +86,33 @@ if __name__ == "__main__":
     print("Mean:", mean(user_numbers))
     print("Median:", median(user_numbers))
     print("Mode:", mode(user_numbers))
+
+#--------------------------------------------------------------------------------------------------------------------#
+
+#MARIA ANGELICA ACANTILADO
+
+def validate_input(numbers):
+    """Check if the list is empty and raise an error if it is."""
+    if not numbers:
+        raise ValueError("The list of numbers is empty.")
+
+def enhanced_mode(numbers):
+    """Compute the mode(s) of a list of numbers. Returns multiple modes if applicable."""
+    validate_input(numbers)
+    
+    frequency = {}
+    for num in numbers:
+        frequency[num] = frequency.get(num, 0) + 1
+
+    max_freq = max(frequency.values())
+    modes = [num for num, freq in frequency.items() if freq == max_freq]
+
+    if len(modes) == len(set(numbers)):
+        return None  # No mode if all numbers have the same frequency
+
+    return modes if len(modes) > 1 else modes[0]
+
+# Example usage of the enhanced mode function (optional testing)
+if __name__ == "__main__":
+    test_numbers = [4, 5, 6, 5, 4, 6, 7, 7, 7]  # Example test case
+    print("Enhanced Mode:", enhanced_mode(test_numbers))
