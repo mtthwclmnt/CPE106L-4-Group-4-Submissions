@@ -14,7 +14,7 @@ def navigate_file():
         while True:
             try:
                 # Prompt user for a line number to display
-                line_number = int(input("Enter a line number (0 to quit): "))           
+                line_number = int(input("\nEnter a line number (0 to quit): "))           
                 if line_number == 0:
                     break           # Exit the loop if user enters 0 as input
                 elif 1 <= line_number <= num_lines:
