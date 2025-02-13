@@ -1,3 +1,4 @@
+#CHALZEA FRANSEN C. DYTIANQUIN
 def median(li):
     li.sort()
     if len(li) % 2 == 0:
@@ -33,7 +34,9 @@ print("Mode:", mode(li))
 print("Median:", median(li))
 print("Mean:", mean(li))
 
-#Vance David G. Samia
+#--------------------------------------------------------------------------------------------------------------------#
+
+#VANCE DAVID G. SAMIA
 def mean(numbers):
     """Compute the mean of a list of numbers."""
     if not numbers:
