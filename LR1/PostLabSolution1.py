@@ -19,8 +19,17 @@ def mean(li):
 
 # Calculating Mode
 def mode(li):
-    mode1 = max(li, key=li.count)
-    return mode1
+    if not li:
+        return None  # Return None if the list is empty
+    frequency = {}
+    for num in li:
+        frequency[num] = frequency.get(num, 0) + 1
+    max_freq = max(frequency.values())
+    modes = [num for num, freq in frequency.items() if freq == max_freq]
+    # If all numbers appear with the same frequency, return None
+    if len(modes) == len(li):
+        return None
+    return modes[0]
 
 # Input for the number of values
 print("\n")  # Space before first section
