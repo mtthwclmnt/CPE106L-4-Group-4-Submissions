@@ -1,3 +1,5 @@
+# Contributor: CLEMENTE, Brian Matthew E. 
+
 def navigate_file():
     filename = input("Enter the filename: ")
     try:
