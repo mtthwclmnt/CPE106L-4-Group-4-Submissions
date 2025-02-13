@@ -91,14 +91,24 @@ if __name__ == "__main__":
 
 #MARIA ANGELICA ACANTILADO
 
-def validate_input(numbers):
-    """Check if the list is empty and raise an error if it is."""
-    if not numbers:
-        raise ValueError("The list of numbers is empty.")
+def mean(numbers):
+    """Compute the mean of a list of numbers."""
+    return sum(numbers) / len(numbers)
+
+def median(numbers):
+    """Compute the median of a list of numbers."""
+    numbers.sort()
+    n = len(numbers)
+    mid = n // 2
+    if n % 2 == 0:
+        return (numbers[mid - 1] + numbers[mid]) / 2
+    else:
+        return numbers[mid]
 
 def enhanced_mode(numbers):
     """Compute the mode(s) of a list of numbers. Returns multiple modes if applicable."""
-    validate_input(numbers)
+    if not numbers:
+        raise ValueError("The list of numbers is empty.")
     
     frequency = {}
     for num in numbers:
@@ -107,12 +117,29 @@ def enhanced_mode(numbers):
     max_freq = max(frequency.values())
     modes = [num for num, freq in frequency.items() if freq == max_freq]
 
-    if len(modes) == len(set(numbers)):
-        return None  # No mode if all numbers have the same frequency
+    if len(modes) == len(set(numbers)):  
+        return None  # No mode if all numbers appear equally
 
-    return modes if len(modes) > 1 else modes[0]
+    return modes if len(modes) > 1 else modes[0]  # Return list if multiple, else single mode
 
-# Example usage of the enhanced mode function (optional testing)
-if __name__ == "__main__":
-    test_numbers = [4, 5, 6, 5, 4, 6, 7, 7, 7]  # Example test case
-    print("Enhanced Mode:", enhanced_mode(test_numbers))
+# Get user input
+num_values = int(input("How many values do you want to enter? "))
+
+numbers = []
+for i in range(1, num_values + 1):
+    suffix = "th"
+    if i == 1:
+        suffix = "st"
+    elif i == 2:
+        suffix = "nd"
+    elif i == 3:
+        suffix = "rd"
+    
+    value = float(input(f"Enter the {i}{suffix} value: "))
+    numbers.append(value)
+
+# Display results
+print("=" * 28)
+print("Mean:", mean(numbers))
+print("Median:", median(numbers))
+print("Mode:", enhanced_mode(numbers))
