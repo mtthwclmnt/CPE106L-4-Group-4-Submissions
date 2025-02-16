@@ -1,0 +1,7 @@
+boy
+girl
+bat
+ball
+key
+car
+shoe
