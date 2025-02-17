@@ -1,4 +1,4 @@
-# ACANTILADO, MARIA ANGELICA
+# ACANTILADO, MARIA ANGELICA and DYTIANQUIN, CHALZEA FRANSEN C.
 
 def mean(numbers):
     """Returns the mean (average) of a list of numbers."""
@@ -37,26 +37,28 @@ def mode(numbers):
 
 
 def main():
-    """Gets user input and computes mean, median, and mode with validation."""
+    """Test the statistical functions with user input."""
     try:
         user_input = input("Enter numbers separated by spaces: ").strip()
-
+        
         if not user_input:
-            print("\nError! No input provided. Returning 0...")
-            print("Mean: 0\nMedian: 0\nMode: 0")
+            print("Error! No input provided.")
+            return
+        
+        # Convert input string to a list of floats
+        list_numbers = list(map(float, user_input.split()))
+
+        if len(list_numbers) < 2:
+            print("Error! You must enter at least two numbers.")
             return
 
-        numbers = list(map(float, user_input.split()))  # Convert input to list of floats
+        print("List:", list_numbers)
+        print("Mean:", mean(list_numbers))
+        print("Median:", median(list_numbers))
+        print("Mode:", mode(list_numbers))
 
-        if len(numbers) < 2:
-            print("\nError! You must enter at least two numbers. Returning 0...")
-            print("Mean: 0\nMedian: 0\nMode: 0")
-            return
-
-        print(f"\nMean: {mean(numbers)}")
-        print(f"Median: {median(numbers)}")
-        print(f"Mode: {mode(numbers)}")
-
+    except ValueError:
+        print("Invalid input. Please enter numeric values separated by spaces.")
     except ValueError:
         print("\nError! Invalid input. Please enter only numbers separated by spaces.")
 
