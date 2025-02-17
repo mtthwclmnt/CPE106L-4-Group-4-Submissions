@@ -39,17 +39,17 @@ def mode(numbers):
 def main():
     """Gets user input and computes mean, median, and mode with validation."""
     try:
-        user_input = input("Enter at least two numbers separated by spaces: ").strip()
+        user_input = input("Enter numbers separated by spaces: ").strip()
 
         if not user_input:
-            print("Error: No input provided. Returning 0.")
+            print("\nError! No input provided. Returning 0...")
             print("Mean: 0\nMedian: 0\nMode: 0")
             return
 
         numbers = list(map(float, user_input.split()))  # Convert input to list of floats
 
         if len(numbers) < 2:
-            print("Error: You must enter at least two numbers. Returning 0.")
+            print("\nError! You must enter at least two numbers. Returning 0...")
             print("Mean: 0\nMedian: 0\nMode: 0")
             return
 
@@ -58,10 +58,9 @@ def main():
         print(f"Mode: {mode(numbers)}")
 
     except ValueError:
-        print("Error: Invalid input. Please enter only numbers separated by spaces.")
+        print("\nError! Invalid input. Please enter only numbers separated by spaces.")
 
 
 # Ensures the script runs only when executed directly
 if __name__ == "__main__":
     main()
-
