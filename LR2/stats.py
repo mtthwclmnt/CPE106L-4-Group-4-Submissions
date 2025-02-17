@@ -28,30 +28,40 @@ def mode(numbers):
     from collections import Counter
     counts = Counter(numbers)
     max_count = max(counts.values())
-    modes = [num for num, count in counts.items() if count == max_count]
 
-    return modes[0] if len(modes) == 1 else min(modes)  # Return a single number
+    if max_count == 1:  # No repeated numbers
+        return "None"
+
+    modes = [num for num, count in counts.items() if count == max_count]
+    return modes[0] if len(modes) == 1 else min(modes)  # Return a single mode
 
 
 def main():
-    """Gets user input and computes mean, median, and mode."""
+    """Gets user input and computes mean, median, and mode with validation."""
     try:
-        user_input = input("Enter numbers separated by spaces: ").strip()
-        
+        user_input = input("Enter at least two numbers separated by spaces: ").strip()
+
         if not user_input:
-            print("No input provided. Exiting.")
+            print("Error: No input provided. Returning 0.")
+            print("Mean: 0\nMedian: 0\nMode: 0")
             return
 
         numbers = list(map(float, user_input.split()))  # Convert input to list of floats
+
+        if len(numbers) < 2:
+            print("Error: You must enter at least two numbers. Returning 0.")
+            print("Mean: 0\nMedian: 0\nMode: 0")
+            return
 
         print(f"\nMean: {mean(numbers)}")
         print(f"Median: {median(numbers)}")
         print(f"Mode: {mode(numbers)}")
 
     except ValueError:
-        print("Invalid input. Please enter only numbers separated by spaces.")
+        print("Error: Invalid input. Please enter only numbers separated by spaces.")
 
 
 # Ensures the script runs only when executed directly
 if __name__ == "__main__":
     main()
+
