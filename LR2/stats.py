@@ -42,14 +42,16 @@ def main():
         user_input = input("Enter numbers separated by spaces: ").strip()
         
         if not user_input:
-            print("Error! No input provided.")
+            print("\nError! No input provided. Returning 0...")
+            print("Mean: 0\nMedian: 0\nMode: 0")
             return
         
         # Convert input string to a list of floats
         list_numbers = list(map(float, user_input.split()))
 
         if len(list_numbers) < 2:
-            print("Error! You must enter at least two numbers.")
+            print("\nError! You must enter at least two numbers. Returning 0...")
+            print("Mean: 0\nMedian: 0\nMode: 0")
             return
 
         print("List:", list_numbers)
@@ -58,9 +60,8 @@ def main():
         print("Mode:", mode(list_numbers))
 
     except ValueError:
-        print("Invalid input. Please enter numeric values separated by spaces.")
-    except ValueError:
-        print("\nError! Invalid input. Please enter only numbers separated by spaces.")
+        print("\nError! Invalid input. Please enter numeric values separated by spaces. Returning 0...")
+        print("Mean: 0\nMedian: 0\nMode: 0")
 
 
 # Ensures the script runs only when executed directly
