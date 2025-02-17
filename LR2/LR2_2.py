@@ -1,3 +1,4 @@
+#VANCE DAVID G. SAMIA
 def main():
     # Prompt the user for a filename
     file_name = input("Enter the file name: ")
@@ -15,7 +16,7 @@ def main():
         # Main loop for navigating lines
         while True:
             print(f"\nThe file contains {len(lines)} lines.")
-            line_number = int(input("Enter a line number (0 to quit): "))
+            line_number = int(input("Enter a line number or 0 to quit): "))
 
             if line_number == 0:
                 print("Exiting program.")
