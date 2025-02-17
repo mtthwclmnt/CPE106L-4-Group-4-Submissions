@@ -34,12 +34,22 @@ def mode(numbers):
 
 
 def main():
-    """Tests the statistical functions with a sample list."""
-    sample_data = [4, 1, 2, 2, 3, 5, 4, 4]  # Example list
+    """Gets user input and computes mean, median, and mode."""
+    try:
+        user_input = input("Enter numbers separated by spaces: ").strip()
+        
+        if not user_input:
+            print("No input provided. Exiting.")
+            return
 
-    print(f"Mean: {mean(sample_data)}")
-    print(f"Median: {median(sample_data)}")
-    print(f"Mode: {mode(sample_data)}")
+        numbers = list(map(float, user_input.split()))  # Convert input to list of floats
+
+        print(f"\nMean: {mean(numbers)}")
+        print(f"Median: {median(numbers)}")
+        print(f"Mode: {mode(numbers)}")
+
+    except ValueError:
+        print("Invalid input. Please enter only numbers separated by spaces.")
 
 
 # Ensures the script runs only when executed directly
