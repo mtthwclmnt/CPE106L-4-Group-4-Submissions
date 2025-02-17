@@ -3,3 +3,13 @@ saw
 ran
 chat
 feel
+jump
+think
+write
+speak
+laugh
+cry
+play
+drive
+build
+shout

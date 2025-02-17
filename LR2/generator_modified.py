@@ -1,4 +1,7 @@
+# CLEMENTE, BRIAN MATTHEW E.
+
 import random
+import os
 
 def getWords(filename):
     """Reads words from a file and returns them as a tuple."""
@@ -10,11 +13,14 @@ def getWords(filename):
         print(f"Error: {filename} not found.")
         return ()
 
-# Load words from files
-articles = getWords("articles.txt")
-nouns = getWords("nouns.txt")
-verbs = getWords("verbs.txt")
-prepositions = getWords("prepositions.txt")
+# Get the directory of the script (relative path)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Use relative paths based on the script's directory
+articles = getWords(os.path.join(script_dir, "articles.txt"))
+nouns = getWords(os.path.join(script_dir, "nouns.txt"))
+verbs = getWords(os.path.join(script_dir, "verbs.txt"))
+prepositions = getWords(os.path.join(script_dir, "prepositions.txt"))
 
 def sentence():
     """Builds and returns a sentence."""
