@@ -5,14 +5,17 @@ import os
 
 def getWords(filename):
     """Reads words from a file and returns them as a tuple."""
+    full_path = os.path.join(script_dir, filename)
     try:
-        with open(filename, 'r') as file:
+        with open(full_path, 'r') as file:
             words = [line.strip().upper() for line in file if line.strip()]
+        if not words:
+            print(f"Error: {filename} is empty. Expected file at {full_path}")
         return tuple(words)
     except FileNotFoundError:
-        print(f"Error: {filename} not found.")
+        print(f"Error: {filename} not found. Expected file at {full_path}")
         return ()
-
+    
 # Get the directory of the script (relative path)
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -50,4 +53,4 @@ if __name__ == "__main__":
     if not (articles and nouns and verbs and prepositions):
         print("Error: One or more vocabulary files are missing or empty.")
     else:
-        main()
+        main()  
