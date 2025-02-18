@@ -1,4 +1,5 @@
-#VANCE DAVID G. SAMIA
+# SAMIA, VANCE DAVID G.
+
 def main():
     # Prompt the user for a filename
     file_name = input("Enter the file name: ")
@@ -33,3 +34,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
