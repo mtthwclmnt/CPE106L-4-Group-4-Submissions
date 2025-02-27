@@ -42,6 +42,7 @@ def signup_page(page):
         ft.TextField(label="Last Name *", width=300),
         ft.TextField(label="Country", width=300),
         ft.TextField(label="City/Province", width=300),
+        ft.Container(height=1, bgcolor="white", width=300),
         ft.TextField(label="Email *", width=300),
         ft.TextField(label="Create Password *", password=True, width=300),
     ]
@@ -94,6 +95,23 @@ def home_page(page):
         "User Profile", "User Schedule", "Home Page", "Events Page", "Bookmarked Posts", "Settings", "Log Out"
     ]
 
+    def navigate_to(page_name):
+        page.clean()  # Clear the current page content
+        if page_name == "User Profile":
+            user_profile_page(page)
+        elif page_name == "User Schedule":
+            user_schedule_page(page)
+        elif page_name == "Home Page":
+            home_page(page)
+        elif page_name == "Events Page":
+            events_page(page)
+        elif page_name == "Bookmarked Posts":
+            bookmarked_posts_page(page)
+        elif page_name == "Settings":
+            settings_page(page)
+        elif page_name == "Log Out":
+            logout_user(page)
+
     # User Profile section (emphasized)
     user_profile = ft.Column(
         [
@@ -111,16 +129,15 @@ def home_page(page):
 
     # Navigation menu items with increased spacing
     sidebar_items = [
-        ft.Row(
-            [
-                ft.Container(
+        ft.TextButton(
+            content=ft.Row(
+                [
                     ft.Icon(icon, color="white", size=20),
-                    width=40, height=40, border_radius=20, bgcolor="#2E2E2E",
-                    alignment=ft.alignment.center
-                ),
-                ft.Text(text, color="white", size=14)
-            ],
-            spacing=10
+                    ft.Text(text, color="white", size=14)
+                ],
+                spacing=10
+            ),
+            on_click=lambda e, text=text: navigate_to(text)  # Make the entire row clickable
         )
         for icon, text in zip(sidebar_icons[1:], sidebar_texts[1:])  # Skip User Profile from here
     ]
@@ -135,9 +152,65 @@ def home_page(page):
     layout = ft.Row([
         ft.Container(content=sidebar, width=250, bgcolor="#2A2A2A", padding=20, alignment=ft.alignment.top_center),
         ft.Container(content=main_content, expand=True, alignment=ft.alignment.center)
-    ])
+    ], expand=True)
     
     page.add(layout)
     page.update()
+
+def user_profile_page(page):
+    page.title = "User Profile"
+    content = ft.Column([
+        ft.Text("User Profile Page", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        # Add more content
+    ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    
+    page.add(content)
+    page.update()
+
+def user_schedule_page(page):
+    page.title = "User Schedule"
+    content = ft.Column([
+        ft.Text("User Schedule Page", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        # Add more content
+    ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    
+    page.add(content)
+    page.update()
+
+def events_page(page):
+    page.title = "Events Page"
+    content = ft.Column([
+        ft.Text("Events Page", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        # Add more content
+    ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    
+    page.add(content)
+    page.update()
+
+def bookmarked_posts_page(page):
+    page.title = "Bookmarked Posts"
+    content = ft.Column([
+        ft.Text("Bookmarked Posts Page", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        # Add more content
+    ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    
+    page.add(content)
+    page.update()
+
+def settings_page(page):
+    page.title = "Settings"
+    content = ft.Column([
+        ft.Text("Settings Page", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        # Add more content
+    ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+    
+    page.add(content)
+    page.update()
+
+def logout_user(page):
+    # Handle logout logic here
+    page.title = "Logged Out"
+    page.clean()  # Clear the current page content
+    main(page)  # Redirect to the main page
 
 ft.app(target=main)
