@@ -1,4 +1,5 @@
 import flet as ft
+import re
 
 def main(page: ft.Page):
     page.title = "Event Platform"
@@ -26,32 +27,50 @@ def main(page: ft.Page):
 
     page.add(ft.Container(content=button_container, alignment=ft.alignment.center, expand=True))
     page.update()
-
+    
 def signup_page(page):
     def go_back(e):
         page.clean()
         main(page)
     
     def submit_signup(e):
+        errors = False
+        required_fields = [first_name, last_name, email, password]
+        
+        for field in required_fields:
+            if not field.value.strip():
+                field.border_color = "red"
+                errors = True
+            else:
+                field.border_color = "gray"
+        
+        if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email.value):
+            email.border_color = "red"
+            errors = True
+        
+        if errors:
+            page.snack_bar = ft.SnackBar(content=ft.Text("Fill in the * required fields."), bgcolor="red")
+            page.snack_bar.open = True
+            page.update()
+            return
+        
         page.clean()
         home_page(page)
 
     page.title = "Sign Up"
-    fields = [
-        ft.TextField(label="First Name *", width=300),
-        ft.TextField(label="Last Name *", width=300),
-        ft.TextField(label="Country", width=300),
-        ft.TextField(label="City/Province", width=300),
-        ft.Container(height=1, bgcolor="white", width=300),
-        ft.TextField(label="Email *", width=300),
-        ft.TextField(label="Create Password *", password=True, width=300),
-    ]
+    first_name = ft.TextField(label="First Name *", width=300)
+    last_name = ft.TextField(label="Last Name *", width=300)
+    country = ft.TextField(label="Country", width=300)
+    city = ft.TextField(label="City/Province", width=300)
+    separator = ft.Container(height=1, bgcolor="white", width=250)
+    email = ft.TextField(label="Email *", width=300)
+    password = ft.TextField(label="Create Password *", password=True, width=300)
 
     btn_signup = ft.ElevatedButton("Sign Up", on_click=submit_signup, bgcolor="green", color="white", width=200)
     btn_back = ft.TextButton("Back", on_click=go_back)
 
     form_container = ft.Column(
-        fields + [btn_signup, btn_back], 
+        [first_name, last_name, country, city, separator, email, password, btn_signup, btn_back], 
         alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
@@ -65,24 +84,48 @@ def login_page(page):
         main(page)
     
     def submit_login(e):
+        errors = False
+        
+        if not email.value.strip():
+            email.border_color = "red"
+            errors = True
+        else:
+            email.border_color = "gray"
+        
+        if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email.value):
+            email.border_color = "red"
+            errors = True
+        
+        if not password.value.strip():
+            password.border_color = "red"
+            errors = True
+        else:
+            password.border_color = "gray"
+        
+        if errors:
+            page.snack_bar = ft.SnackBar(content=ft.Text("Fill in the * required fields."), bgcolor="red")
+            page.snack_bar.open = True
+            page.update()
+            return
+        
         page.clean()
         home_page(page)
 
     page.title = "Log In"
-
-    email_field = ft.TextField(label="Email Address", width=300)
-    password_field = ft.TextField(label="Password", password=True, width=300)
+    email = ft.TextField(label="Email Address *", width=300)
+    password = ft.TextField(label="Password *", password=True, width=300)
     btn_login = ft.ElevatedButton("Log In", on_click=submit_login, bgcolor="green", color="white", width=200)
     btn_back = ft.TextButton("Back", on_click=go_back)
 
     login_container = ft.Column(
-        [email_field, password_field, btn_login, btn_back], 
+        [email, password, btn_login, btn_back], 
         alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
     page.add(ft.Container(content=login_container, alignment=ft.alignment.center, expand=True))
     page.update()
+
 
 def home_page(page):
     page.title = "Home"
