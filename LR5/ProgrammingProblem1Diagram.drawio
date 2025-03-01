@@ -1,0 +1,73 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36" version="26.0.16">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="693" dy="402" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-23" value="Enrollment" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="430" y="380" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-24" value="+ EnrollmentID : INT (PK)&lt;div&gt;+ ParticipantID : INT (FK)&lt;/div&gt;&lt;div&gt;+ ScheduleID : INT (FK)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="WAMaJP8rqf4U5kylbJUa-23" vertex="1">
+          <mxGeometry y="26" width="140" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-6" value="Participants" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="180" y="380" width="140" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-7" value="+ ParticipantID : INT (PK)&lt;div&gt;+ LastName : VARCHAR&lt;/div&gt;&lt;div&gt;+ FirstName : VARCHAR&lt;/div&gt;&lt;div&gt;+ Address : VARCHAR&lt;/div&gt;&lt;div&gt;+ City : VARCHAR&lt;/div&gt;&lt;div&gt;+ State : VARCHAR&lt;/div&gt;&lt;div&gt;+ PostalCode : VARCHAR&lt;/div&gt;&lt;div&gt;+ PhoneNumber : VARCHAR&lt;/div&gt;&lt;div&gt;+ DateOfBirth : DATE&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="WAMaJP8rqf4U5kylbJUa-6" vertex="1">
+          <mxGeometry y="26" width="140" height="184" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-15" value="AdventureClass" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="180" y="630" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-16" value="+ ClassID : INT (PK)&lt;div&gt;+ ClassDescription : VARCHAR&lt;/div&gt;&lt;div&gt;+ MaxParticipants : INT&lt;/div&gt;&lt;div&gt;+ ClassFee : DECIMAL&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="WAMaJP8rqf4U5kylbJUa-15" vertex="1">
+          <mxGeometry y="26" width="140" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-19" value="ClassSchedule" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="430" y="630" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-20" value="+ ScheduleID : INT (PK)&lt;div&gt;+ ClassID : INT (FK)&lt;/div&gt;&lt;div&gt;+ ClassDate : DATE&lt;/div&gt;&lt;div&gt;+ GuideID : INT (FK) (Optional)&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="WAMaJP8rqf4U5kylbJUa-19" vertex="1">
+          <mxGeometry y="26" width="140" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-27" value="Guide" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="670" y="630" width="140" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-28" value="+ GuideID : INT (PK)&lt;div&gt;+ LastName : VARCHAR&lt;/div&gt;&lt;div&gt;+ FirstName : VARCHAR&lt;/div&gt;&lt;div&gt;+ Specialty : VARCHAR&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="WAMaJP8rqf4U5kylbJUa-27" vertex="1">
+          <mxGeometry y="26" width="140" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-32" value="1..*" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=none;endFill=0;endSize=6;align=left;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;shadow=0;exitX=1;exitY=0.158;exitDx=0;exitDy=0;exitPerimeter=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="WAMaJP8rqf4U5kylbJUa-7" target="WAMaJP8rqf4U5kylbJUa-23" edge="1">
+          <mxGeometry x="0.5556" relative="1" as="geometry">
+            <mxPoint x="340" y="430" as="sourcePoint" />
+            <mxPoint x="430" y="440" as="targetPoint" />
+            <Array as="points" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-33" value="1..*" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=none;endFill=0;endSize=6;align=left;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="WAMaJP8rqf4U5kylbJUa-24" target="WAMaJP8rqf4U5kylbJUa-19" edge="1">
+          <mxGeometry x="0.5714" y="10" relative="1" as="geometry">
+            <mxPoint x="430" y="560.004" as="sourcePoint" />
+            <mxPoint x="500" y="610" as="targetPoint" />
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="500" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-34" value="1..*" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=none;endFill=0;endSize=6;align=left;rounded=0;exitX=1;exitY=0.34;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.34;entryDx=0;entryDy=0;entryPerimeter=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="WAMaJP8rqf4U5kylbJUa-16" target="WAMaJP8rqf4U5kylbJUa-20" edge="1">
+          <mxGeometry x="0.4545" relative="1" as="geometry">
+            <mxPoint x="340" y="690" as="sourcePoint" />
+            <mxPoint x="410" y="690" as="targetPoint" />
+            <mxPoint as="offset" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WAMaJP8rqf4U5kylbJUa-36" value="0..*" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=none;endFill=0;endSize=6;align=left;rounded=0;entryX=0;entryY=0.386;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.34;exitDx=0;exitDy=0;exitPerimeter=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="WAMaJP8rqf4U5kylbJUa-20" target="WAMaJP8rqf4U5kylbJUa-28" edge="1">
+          <mxGeometry x="-0.75" relative="1" as="geometry">
+            <mxPoint x="600" y="685" as="sourcePoint" />
+            <mxPoint x="660" y="684.58" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
