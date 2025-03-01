@@ -1,4 +1,5 @@
-#Vance David G. Samia
+# SAMIA, VANCE DAVID G.
+
 import json
 
 def load_data():
