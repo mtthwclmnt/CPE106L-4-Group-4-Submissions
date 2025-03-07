@@ -76,7 +76,7 @@ def signup_page(page):
             "first_name": first_name.value,
             "last_name": last_name.value,
             "email": email.value,
-            "password": password.value  # ⚠ In a real app, hash the password before storing!
+            "password": password.value 
         })
 
         page.snack_bar = ft.SnackBar(content=ft.Text("Account created successfully!"), bgcolor="green")
