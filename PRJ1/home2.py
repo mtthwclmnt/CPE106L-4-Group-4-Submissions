@@ -5,8 +5,8 @@ import pymongo
 # MongoDB Connection
 MONGO_URI = "mongodb+srv://group4:09009009999@cluster0.oov1f.mongodb.net/?retryWrites=true&w=majority"
 client = pymongo.MongoClient(MONGO_URI)
-db = client["Vollink"]  # Change this to your actual database name
-users_collection = db["users"]  # Users 
+db = client["Vollink"]  
+users_collection = db["users"]
 
 def main(page: ft.Page):
     page.title = "Event Platform"
