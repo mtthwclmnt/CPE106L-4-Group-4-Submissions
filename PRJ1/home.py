@@ -340,7 +340,7 @@ def home_page(page, user):
                 blur_radius=10,
                 spread_radius=2,
                 color=ft.colors.with_opacity(0.2, ft.colors.BLACK),
-                offset=ft.Offset(3, 3)  # Optional: Add shadow for depth
+                offset=ft.Offset(3, 3) 
             )
         )
         for icon, text in zip(sidebar_icons, sidebar_texts)
@@ -381,7 +381,7 @@ def create_event_page(container, user):
             "name": name.value,
             "date": date.value,
             "address": address.value,
-            "description": description.value,  # Add description to event data
+            "description": description.value,  
             "organizer_id": str(user["_id"]),
             "organizer_name": f"{user['first_name']} {user['last_name']}",
             "volunteers": []
@@ -389,7 +389,7 @@ def create_event_page(container, user):
         
         events_collection.insert_one(new_event)
         
-        # Show success dialog
+       
         def close_dlg(e):
             dlg.open = False
             container.page.update()
@@ -406,7 +406,7 @@ def create_event_page(container, user):
         dlg.open = True
         container.page.update()
         
-        # Clear form
+     
         name.value = date.value = address.value = description.value = ""
         container.update()
 
@@ -440,7 +440,7 @@ def available_events_page(container, user):
                 {"$addToSet": {"volunteers": str(user["_id"])}}
             )
             
-            # Show success dialog
+           
             def close_dlg(e):
                 dlg.open = False
                 container.page.update()
@@ -464,7 +464,7 @@ def available_events_page(container, user):
         {"volunteers": {"$nin": [str(user["_id"])]}}
     ))
     
-    events_list = ft.Column(spacing=10)
+    events_list = ft.ListView(spacing=10, expand=True)
     
     if not events:
         events_list.controls.append(
@@ -502,8 +502,14 @@ def available_events_page(container, user):
 
     container.content = ft.Column([
         ft.Text("Available Events", size=24, weight=ft.FontWeight.BOLD, color="white"),
-        events_list
-    ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        ft.Container(
+            content=events_list,
+            expand=True,
+            border=ft.border.all(1, "#404040"),
+            border_radius=10,
+            padding=10
+        )
+    ], expand=True)
     container.update()
 
 def my_events_page(container, user):
@@ -535,7 +541,7 @@ def my_events_page(container, user):
             # Delete the event immediately
             events_collection.delete_one({"_id": ObjectId(event_id)})
             
-            # Show success dialog
+           
             success_dlg = ft.AlertDialog(
                 title=ft.Text("Success"),
                 content=ft.Text("Event has been permanently deleted!"),
@@ -553,7 +559,7 @@ def my_events_page(container, user):
         return handle_click
 
     events = list(events_collection.find({"organizer_id": str(user["_id"])}))
-    events_list = ft.Column(spacing=10)
+    events_list = ft.ListView(spacing=10, expand=True)  
     
     if not events:
         events_list.controls.append(
@@ -621,8 +627,14 @@ def my_events_page(container, user):
     
     container.content = ft.Column([
         ft.Text("My Created Events", size=24, weight=ft.FontWeight.BOLD, color="white"),
-        events_list
-    ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER)
+        ft.Container(
+            content=events_list,
+            expand=True,
+            border=ft.border.all(1, "#404040"),
+            border_radius=10,
+            padding=10
+        )
+    ], expand=True)
     container.update()
 
 def my_volunteering_page(container, user):
@@ -657,7 +669,7 @@ def my_volunteering_page(container, user):
                 {"$pull": {"volunteers": str(user["_id"])}}
             )
             
-            # Show success dialog
+            
             success_dlg = ft.AlertDialog(
                 title=ft.Text("Success"),
                 content=ft.Text("You have left the event successfully!"),
@@ -694,7 +706,7 @@ def my_volunteering_page(container, user):
                    size=16)
         )
     else:
-        events_list = ft.Column(spacing=10)
+        events_list = ft.ListView(spacing=10, expand=True)
         bookmarked_events = []
         other_events = []
         
@@ -755,14 +767,25 @@ def my_volunteering_page(container, user):
         events_list.controls.extend(other_events)
         main_column.controls.append(events_list)
 
-    # Create main container with background color
+    # Create main container 
     container.content = ft.Container(
-        content=main_column,
+        content=ft.Column([
+            ft.Text("My Volunteering Events", 
+                   size=24, 
+                   weight=ft.FontWeight.BOLD, 
+                   color="white"),
+            ft.Container(
+                content=events_list,
+                expand=True,
+                border=ft.border.all(1, "#404040"),
+                border_radius=10,
+                padding=10
+            )
+        ], expand=True),
         padding=40,
         bgcolor="#1E1E1E", 
         expand=True
     )
-    
     container.update()
 
 def settings_page(container, user):
@@ -797,7 +820,7 @@ def settings_page(container, user):
             {"$set": {"password": new_password.value}}
         )
 
-        # Show success message
+        
         error_text.value = "Password changed successfully!"
         error_text.color = "green"
         
@@ -839,7 +862,7 @@ def settings_page(container, user):
         ft.Text("Change Password", size=16, weight=ft.FontWeight.BOLD, color="white"),
         current_password,
         new_password,
-        error_text,  # Add the error/success message text
+        error_text, 
         btn_change
     ], 
     alignment=ft.MainAxisAlignment.CENTER,
@@ -870,7 +893,7 @@ def bookmarked_posts_page(container, user):
     # Fetch bookmarked events
     events = list(events_collection.find({"_id": {"$in": object_ids}}))
     
-    events_list = ft.Column(spacing=10)
+    events_list = ft.ListView(spacing=10, expand=True)
     
     if not events:
         events_list.controls.append(
@@ -921,12 +944,14 @@ def bookmarked_posts_page(container, user):
                size=24, 
                weight=ft.FontWeight.BOLD, 
                color="white"),
-        events_list
-    ], 
-    alignment=ft.MainAxisAlignment.CENTER,
-    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-    spacing=20)
-    
+        ft.Container(
+            content=events_list,
+            expand=True,
+            border=ft.border.all(1, "#404040"),
+            border_radius=10,
+            padding=10
+        )
+    ], expand=True)
     container.update()
 
 def user_profile_page(container, user):
@@ -980,12 +1005,12 @@ def user_profile_page(container, user):
         user['country'] = country.value
         user['city'] = city.value
 
-        # Show success message
+       
         status_text.value = "Profile updated successfully!"
         status_text.color = "green"
         container.update()
 
-        # Show success dialog
+        
         success_dlg = ft.AlertDialog(
             title=ft.Text("Success"),
             content=ft.Text("Your profile has been updated successfully!"),
