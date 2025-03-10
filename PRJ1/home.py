@@ -11,13 +11,16 @@ db = client["Vollink"]
 users_collection = db["users"]
 events_collection = db["events"]
 
+background_color = "#8c9657"
 primary_color = "#473f34"
 text_color = "#f0e5c7"
-label_style_text = ft.TextStyle(color=text_color)
+text_hov_color = primary_color
+label_style_text = ft.TextStyle(color=text_color, italic=True)
+button_style_back = ft.ButtonStyle(color=text_color)
 
 def main(page: ft.Page):
     page.title = "User Authentication"
-    page.bgcolor = "#8c9657"
+    page.bgcolor = background_color
     page.window_width = 1000
     page.window_height = 600
     page.window_resizable = False
@@ -113,7 +116,7 @@ def signup_page(page):
     password = ft.TextField(label="Create Password *", password=True, width=300, border_radius=12, label_style=label_style_text)
 
     btn_signup = ft.ElevatedButton("Sign Up", on_click=submit_signup, bgcolor=primary_color, color=text_color, width=170, height=40)
-    btn_back = ft.TextButton("Back", on_click=go_back, style=ft.ButtonStyle(bgcolor=primary_color, color=text_color), width=170, height=40)
+    btn_back = ft.TextButton("Back", on_click=go_back, style=button_style_back, width=170, height=40)
 
     form_container = ft.Column(
         [first_name, last_name, country, city, separator, email, password, btn_signup, btn_back], 
@@ -205,10 +208,10 @@ def login_page(page):
         page.client_storage.set("user_email", email.value)
         
     page.title = "Log In"
-    email = ft.TextField(label="Email Address *", width=300)
-    password = ft.TextField(label="Password *", password=True, width=300)
-    btn_login = ft.ElevatedButton("Log In", on_click=submit_login, bgcolor="green", color="white", width=200)
-    btn_back = ft.TextButton("Back", on_click=go_back)
+    email = ft.TextField(label="Email Address *", width=300, border_radius=12, label_style=label_style_text)
+    password = ft.TextField(label="Password *", password=True, width=300, border_radius=12, label_style=label_style_text)
+    btn_login = ft.ElevatedButton("Log In", on_click=submit_login, bgcolor=primary_color, color=text_color, width=170, height=40)
+    btn_back = ft.TextButton("Back", on_click=go_back, style=button_style_back, width=170, height=40)
 
     login_container = ft.Column(
         [email, password, btn_login, btn_back], 
@@ -218,6 +221,7 @@ def login_page(page):
 
     page.add(ft.Container(content=login_container, alignment=ft.alignment.center, expand=True))
     page.update()
+    
 def role_selection_page(page, user):
     def select_role(role):
         def handle(e):
@@ -253,6 +257,7 @@ def home_page(page, user):
         user["role"] = new_role
         page.clean()
         home_page(page, user)
+        
     # Modify sidebar based on user role
     if user.get("role") == "organizer":
         sidebar_icons = [
@@ -296,14 +301,14 @@ def home_page(page, user):
     user_profile = ft.Column(
         [
             ft.Container(
-                content=ft.Icon("person", color="#2AAA8A", size=40),
-                width=60, height=60, border_radius=30, bgcolor=" #4CBB17",
+                content=ft.Icon("person", color=text_color, size=40),
+                width=60, height=60, border_radius=30, bgcolor=background_color,
                 alignment=ft.alignment.center
             ),
             ft.Text(f"{user['first_name']} {user['last_name']}", 
-                   color="#2AAA8A", size=18, weight=ft.FontWeight.BOLD),
+                   color=text_color, size=18, weight=ft.FontWeight.BOLD),
             ft.Text(f"Your role: {user['role'].capitalize()}", 
-                   color="#2AAA8A", size=14, italic=True)
+                   color=text_color, size=14, italic=True)
         ],
         alignment=ft.MainAxisAlignment.CENTER,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -312,33 +317,49 @@ def home_page(page, user):
 
     # Navigation menu items with increased spacing
     sidebar_items = [
-        ft.TextButton(
-            content=ft.Row(
-                [
-                    ft.Icon(icon, color="white", size=20),
-                    ft.Text(text, color="white", size=14)
-                ],
-                spacing=10
+        ft.Container(
+            content=ft.TextButton(
+                content=ft.Row(
+                    [
+                        ft.Icon(icon, color=text_color, size=20),
+                        ft.Text(text, color=text_color, size=14)
+                    ],
+                    spacing=12  
+                ),
+                on_click=lambda e, text=text: navigate_to(text),
+                style=ft.ButtonStyle(
+                    bgcolor={"": primary_color, "hovered": text_hov_color},  # Background color & hover effect
+                    padding=15,  # Adjust spacing inside the button
+                    shape=ft.RoundedRectangleBorder(radius=8)  # Optional rounded corners
+                )
             ),
-            on_click=lambda e, text=text: navigate_to(text)
+            bgcolor=primary_color,  # Default background color for consistency
+            border_radius=8,  # Rounded corners
+            margin=ft.margin.only(bottom=5),  # Spacing between items
+            shadow=ft.BoxShadow(
+                blur_radius=10,
+                spread_radius=2,
+                color=ft.colors.with_opacity(0.2, ft.colors.BLACK),
+                offset=ft.Offset(3, 3)  # Optional: Add shadow for depth
+            )
         )
-        for icon, text in zip(sidebar_icons, sidebar_texts)  
+        for icon, text in zip(sidebar_icons, sidebar_texts)
     ]
 
     sidebar = ft.Column(
         [user_profile] + sidebar_items, 
-        spacing=20
+        spacing=24
     )
 
     main_content = ft.Container(
         content=ft.Text("Welcome! Select an option from the navigation bar.", 
-                       color="black", size=16, weight=ft.FontWeight.BOLD), 
+                       color=text_color, size=16, weight=ft.FontWeight.BOLD), 
         expand=True, 
         alignment=ft.alignment.center
     )
     
     layout = ft.Row([
-        ft.Container(content=sidebar, width=250, bgcolor="#2A2A2A", padding=20, alignment=ft.alignment.top_center),
+        ft.Container(content=sidebar, width=250, bgcolor=primary_color, padding=20, alignment=ft.alignment.top_center),
         main_content
     ], expand=True)
     
