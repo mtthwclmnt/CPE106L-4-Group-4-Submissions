@@ -11,9 +11,13 @@ db = client["Vollink"]
 users_collection = db["users"]
 events_collection = db["events"]
 
+primary_color = "#473f34"
+text_color = "#f0e5c7"
+label_style_text = ft.TextStyle(color=text_color)
+
 def main(page: ft.Page):
     page.title = "User Authentication"
-    page.bgcolor = "#4CBB17"
+    page.bgcolor = "#8c9657"
     page.window_width = 1000
     page.window_height = 600
     page.window_resizable = False
@@ -26,10 +30,10 @@ def main(page: ft.Page):
         page.clean()
         login_page(page)
 
-    title = ft.Text("Vollink", size=30, weight=ft.FontWeight.BOLD, color="black")
+    title = ft.Text("Vollink", size=50, weight=ft.FontWeight.BOLD, color=text_color)
 
-    btn_signup = ft.ElevatedButton("Sign Up", on_click=go_to_signup, bgcolor="green", color="white", width=200)
-    btn_login = ft.ElevatedButton("Log In", on_click=go_to_login, bgcolor="green", color="white", width=200)
+    btn_signup = ft.ElevatedButton("Sign Up", on_click=go_to_signup, bgcolor=primary_color, color=text_color, width=170, height=40)
+    btn_login = ft.ElevatedButton("Log In", on_click=go_to_login, bgcolor=primary_color, color=text_color, width=170, height=40)
 
     button_container = ft.Column(
         [title, btn_signup, btn_login],
@@ -100,16 +104,16 @@ def signup_page(page):
         role_selection_page(page, user)
 
     page.title = "Sign Up"
-    first_name = ft.TextField(label="First Name *", width=300)
-    last_name = ft.TextField(label="Last Name *", width=300)
-    country = ft.TextField(label="Country", width=300)
-    city = ft.TextField(label="City/Province", width=300)
-    separator = ft.Container(height=1, bgcolor="white", width=250)
-    email = ft.TextField(label="Email *", width=300)
-    password = ft.TextField(label="Create Password *", password=True, width=300)
+    first_name = ft.TextField(label="First Name *", width=300, border_radius=12, label_style=label_style_text)
+    last_name = ft.TextField(label="Last Name *", width=300, border_radius=12, label_style=label_style_text)
+    country = ft.TextField(label="Country", width=300, border_radius=12, label_style=label_style_text)
+    city = ft.TextField(label="City/Province", width=300, border_radius=12, label_style=label_style_text)
+    separator = ft.Container(height=2, bgcolor=primary_color, width=250, border_radius=10)
+    email = ft.TextField(label="Email *", width=300, border_radius=12, label_style=label_style_text)
+    password = ft.TextField(label="Create Password *", password=True, width=300, border_radius=12, label_style=label_style_text)
 
-    btn_signup = ft.ElevatedButton("Sign Up", on_click=submit_signup, bgcolor="black", color="white", width=200)
-    btn_back = ft.TextButton("Back", on_click=go_back)
+    btn_signup = ft.ElevatedButton("Sign Up", on_click=submit_signup, bgcolor=primary_color, color=text_color, width=170, height=40)
+    btn_back = ft.TextButton("Back", on_click=go_back, style=ft.ButtonStyle(bgcolor=primary_color, color=text_color), width=170, height=40)
 
     form_container = ft.Column(
         [first_name, last_name, country, city, separator, email, password, btn_signup, btn_back], 
