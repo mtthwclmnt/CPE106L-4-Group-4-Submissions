@@ -1,0 +1,42 @@
+[
+   {
+      "$lookup": {
+         "from": "albums",
+         "localField": "AlbumID",
+         "foreignField": "_id",
+         "as": "album_info"
+      }
+   },
+   {
+      "$unwind": {
+         "path": "$album_info",
+         "preserveNullAndEmptyArrays": true
+      }
+   },
+   {
+      "$lookup": {
+         "from": "artists",
+         "localField": "album_info.ArtistID",
+         "foreignField": "_id",
+         "as": "artist_info"
+      }
+   },
+   {
+      "$unwind": {
+         "path": "$artist_info",
+         "preserveNullAndEmptyArrays": true
+      }
+   },
+   {
+      "$project": {
+         "_id": 1,
+         "Name": 1,
+         "Composer": 1,
+         "Milliseconds": 1,
+         "Bytes": 1,
+         "UnitPrice": 1,
+         "Album": "$album_info.Title",
+         "Artist": "$artist_info.Name"
+      }
+   }
+]
