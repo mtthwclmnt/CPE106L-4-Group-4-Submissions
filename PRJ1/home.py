@@ -65,7 +65,7 @@ def signup_page(page):
         
         if email.value.strip() and not validate_email(email.value):
             email.border_color = "red"
-            email.error_text = "Enter a valid email (sample@dummy.com)"
+            email.error_text = "Enter a valid email (sample@email.com)"
             errors = True
         
         if errors:
@@ -76,8 +76,8 @@ def signup_page(page):
 
         # Check if email already exists
         if users_collection.find_one({"email": email.value}):
-            page.snack_bar = ft.SnackBar(content=ft.Text("Email already exists!"), bgcolor="red")
-            page.snack_bar.open = True
+            email.border_color = "red"
+            email.error_text = "Email already exists!"
             page.update()
             return
 
@@ -143,7 +143,7 @@ def login_page(page):
         if email.value.strip():
             if not validate_email(email.value):
                 email.border_color = "red"
-                email.error_text = "Enter a valid email (sample@dummy.com)"
+                email.error_text = "Enter a valid email (sample@email.com)"
                 errors = True
             else:
                 # Reset email field error if the format is valid
