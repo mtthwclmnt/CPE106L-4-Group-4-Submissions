@@ -19,7 +19,9 @@ text_color_title = "white"
 brdr_color = "white"
 brdr_color_bookmarked = "green"
 bookmark_color_bg = "#f0e5c7"
-bookmark_color_bg_active = "yellow"
+bookmark_color_bg_active = "green"
+card_bg_color = "#473f34"
+card_brdr_color = "white"
 text_hov_color = primary_color
 label_style_text = ft.TextStyle(color=text_color, italic=True)
 button_style_back = ft.ButtonStyle(color=text_color)
@@ -474,7 +476,7 @@ def available_events_page(container, user):
     
     if not events:
         events_list.controls.append(
-            ft.Text("No available events.", color="white")
+            ft.Text("No available events.", color=text_color_light, size=13)
         )
     else:
         for event in events:
@@ -500,9 +502,10 @@ def available_events_page(container, user):
                                     color="white", width=120, height=35)
                 ]),
                 padding=20,
-                border=ft.border.all(1, "white"),
+                border=ft.border.all(3, brdr_color),
                 border_radius=10,
-                margin=5
+                margin=5,
+                bgcolor=card_bg_color 
             )
             events_list.controls.append(event_card)
 
@@ -619,7 +622,8 @@ def my_events_page(container, user):
                 padding=20,
                 border=ft.border.all(3, brdr_color_bookmarked if is_bookmarked else brdr_color),
                 border_radius=10,
-                margin=5
+                margin=5,
+                bgcolor=card_bg_color
             )
             
             if is_bookmarked:
@@ -758,7 +762,7 @@ def my_volunteering_page(container, user):
                 border=ft.border.all(3, brdr_color_bookmarked if is_bookmarked else brdr_color),
                 border_radius=10,
                 margin=5,
-                bgcolor="#2A2A2A"  
+                bgcolor=card_bg_color 
             )
             
             if is_bookmarked:
@@ -913,7 +917,7 @@ def bookmarked_posts_page(container, user):
                                expand=True),
                         ft.IconButton(
                             icon="bookmark",
-                            bgcolor="yellow",
+                            bgcolor=bookmark_color_bg_active,
                             on_click=toggle_bookmark(event["_id"])
                         )
                     ]),
@@ -935,7 +939,7 @@ def bookmarked_posts_page(container, user):
                 border=ft.border.all(3, brdr_color_bookmarked),
                 border_radius=10,
                 margin=5,
-                bgcolor="#2A2A2A"
+                bgcolor=card_bg_color
             )
             events_list.controls.append(event_card)
 
