@@ -14,6 +14,12 @@ events_collection = db["events"]
 background_color = "#8c9657"
 primary_color = "#473f34"
 text_color = "#f0e5c7"
+text_color_light = "white"
+text_color_title = "white"
+brdr_color = "white"
+brdr_color_bookmarked = "green"
+bookmark_color_bg = "#f0e5c7"
+bookmark_color_bg_active = "yellow"
 text_hov_color = primary_color
 label_style_text = ft.TextStyle(color=text_color, italic=True)
 button_style_back = ft.ButtonStyle(color=text_color)
@@ -51,7 +57,7 @@ def main(page: ft.Page):
 def validate_email(email):
     """Checks if the email follows the correct format."""
     return re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email)
-    
+
 def signup_page(page):
     def go_back(e):
         page.clean()
@@ -113,7 +119,7 @@ def signup_page(page):
     city = ft.TextField(label="City/Province", width=300, border_radius=12, label_style=label_style_text)
     separator = ft.Container(height=2, bgcolor=primary_color, width=250, border_radius=10)
     email = ft.TextField(label="Email *", width=300, border_radius=12, label_style=label_style_text)
-    password = ft.TextField(label="Create Password *", password=True, width=300, border_radius=12, label_style=label_style_text)
+    password = ft.TextField(label="Create Password *", width=300, border_radius=12, label_style=label_style_text, password=True, can_reveal_password=True)
 
     btn_signup = ft.ElevatedButton("Sign Up", on_click=submit_signup, bgcolor=primary_color, color=text_color, width=170, height=40)
     btn_back = ft.TextButton("Back", on_click=go_back, style=button_style_back, width=170, height=40)
@@ -209,7 +215,7 @@ def login_page(page):
         
     page.title = "Log In"
     email = ft.TextField(label="Email Address *", width=300, border_radius=12, label_style=label_style_text)
-    password = ft.TextField(label="Password *", password=True, width=300, border_radius=12, label_style=label_style_text)
+    password = ft.TextField(label="Password *", width=300, border_radius=12, label_style=label_style_text, password=True, can_reveal_password=True)
     btn_login = ft.ElevatedButton("Log In", on_click=submit_login, bgcolor=primary_color, color=text_color, width=170, height=40)
     btn_back = ft.TextButton("Back", on_click=go_back, style=button_style_back, width=170, height=40)
 
@@ -339,7 +345,7 @@ def home_page(page, user):
             shadow=ft.BoxShadow(
                 blur_radius=10,
                 spread_radius=2,
-                color=ft.colors.with_opacity(0.2, ft.colors.BLACK),
+                color=ft.Colors.with_opacity(0.2, color="black"),
                 offset=ft.Offset(3, 3) 
             )
         )
@@ -410,25 +416,25 @@ def create_event_page(container, user):
         name.value = date.value = address.value = description.value = ""
         container.update()
 
-    name = ft.TextField(label="Event Name *", width=300)
-    date = ft.TextField(label="Event Date (YYYY-MM-DD) *", width=300)
-    address = ft.TextField(label="Event Address *", width=300)
+    name = ft.TextField(label="Event Name *", width=300, label_style=label_style_text)
+    date = ft.TextField(label="Event Date (YYYY-MM-DD) *", width=300, label_style=label_style_text)
+    address = ft.TextField(label="Event Address *", width=300, label_style=label_style_text)
     description = ft.TextField(
         label="Event Description",
         width=300,
         multiline=True,
         min_lines=3,
         max_lines=5,
-        border_color="blue"
+        label_style=label_style_text
     )
     
     container.content = ft.Column([
-        ft.Text("Create New Event", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        ft.Text("Create New Event", size=24, weight=ft.FontWeight.BOLD, color=text_color),
         name,
         date,
         address,
         description,
-        ft.ElevatedButton("Create Event", on_click=submit_event, bgcolor="green", color="white")
+        ft.ElevatedButton("Create Event", on_click=submit_event, bgcolor="green", color="white", width=170, height=40)
     ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20)
     container.update()
 
@@ -485,13 +491,13 @@ def available_events_page(container, user):
                             color="white"
                         ),
                         padding=10,
-                        border=ft.border.all(1, "#404040"),
+                        border=ft.border.all(1, "white"),
                         border_radius=5
                     ),
                     ft.ElevatedButton("Join Event", 
                                     on_click=join_event(event["_id"]),
                                     bgcolor="green",
-                                    color="white")
+                                    color="white", width=120, height=35)
                 ]),
                 padding=20,
                 border=ft.border.all(1, "white"),
@@ -501,11 +507,11 @@ def available_events_page(container, user):
             events_list.controls.append(event_card)
 
     container.content = ft.Column([
-        ft.Text("Available Events", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        ft.Text("Available Events", size=24, weight=ft.FontWeight.BOLD, color=text_color_title),
         ft.Container(
             content=events_list,
             expand=True,
-            border=ft.border.all(1, "#404040"),
+            border=ft.border.all(3, primary_color),
             border_radius=10,
             padding=10
         )
@@ -522,7 +528,7 @@ def my_events_page(container, user):
                 )
                 user["bookmarked_events"].remove(str(event_id))
                 e.control.icon = "bookmark_outline"
-                e.control.bgcolor = "white"
+                e.control.bgcolor = bookmark_color_bg
             else:
                 users_collection.update_one(
                     {"_id": user["_id"]},
@@ -532,16 +538,14 @@ def my_events_page(container, user):
                     user["bookmarked_events"] = []
                 user["bookmarked_events"].append(str(event_id))
                 e.control.icon = "bookmark"
-                e.control.bgcolor = "yellow"
+                e.control.bgcolor = bookmark_color_bg_active
             container.update()
         return handle_bookmark
 
     def handle_delete_event(event_id):
         def handle_click(e):
-            # Delete the event immediately
             events_collection.delete_one({"_id": ObjectId(event_id)})
             
-           
             success_dlg = ft.AlertDialog(
                 title=ft.Text("Success"),
                 content=ft.Text("Event has been permanently deleted!"),
@@ -563,7 +567,7 @@ def my_events_page(container, user):
     
     if not events:
         events_list.controls.append(
-            ft.Text("You haven't created any events yet.", color="white")
+            ft.Text("You haven't created any events yet.", color=text_color_light, size=13)
         )
     else:
         bookmarked_events = []
@@ -571,10 +575,9 @@ def my_events_page(container, user):
         
         for event in events:
             is_bookmarked = str(event["_id"]) in user.get("bookmarked_events", [])
-            
             bookmark_button = ft.IconButton(
                 icon="bookmark" if is_bookmarked else "bookmark_outline",
-                bgcolor="yellow" if is_bookmarked else "white",
+                bgcolor=bookmark_color_bg_active if is_bookmarked else bookmark_color_bg,
                 on_click=toggle_bookmark(event["_id"])
             )
 
@@ -582,7 +585,9 @@ def my_events_page(container, user):
                 "Delete Event",
                 on_click=handle_delete_event(str(event["_id"])),
                 bgcolor="red",
-                color="white"
+                color="white",
+                width=120, 
+                height=35
             )
 
             event_card = ft.Container(
@@ -604,7 +609,7 @@ def my_events_page(container, user):
                             color="white"
                         ),
                         padding=10,
-                        border=ft.border.all(1, "#404040"),
+                        border=ft.border.all(1, "white"),
                         border_radius=5
                     ),
                     ft.Row([
@@ -612,7 +617,7 @@ def my_events_page(container, user):
                     ], alignment=ft.MainAxisAlignment.END)
                 ]),
                 padding=20,
-                border=ft.border.all(1, "yellow" if is_bookmarked else "white"),
+                border=ft.border.all(3, brdr_color_bookmarked if is_bookmarked else brdr_color),
                 border_radius=10,
                 margin=5
             )
@@ -630,7 +635,7 @@ def my_events_page(container, user):
         ft.Container(
             content=events_list,
             expand=True,
-            border=ft.border.all(1, "#404040"),
+            border=ft.border.all(3, primary_color),
             border_radius=10,
             padding=10
         )
@@ -647,7 +652,7 @@ def my_volunteering_page(container, user):
                 )
                 user["bookmarked_events"].remove(str(event_id))
                 e.control.icon = "bookmark_outline"
-                e.control.bgcolor = "white"
+                e.control.bgcolor = bookmark_color_bg
             else:
                 users_collection.update_one(
                     {"_id": user["_id"]},
@@ -657,7 +662,7 @@ def my_volunteering_page(container, user):
                     user["bookmarked_events"] = []
                 user["bookmarked_events"].append(str(event_id))
                 e.control.icon = "bookmark"
-                e.control.bgcolor = "yellow"
+                e.control.bgcolor = bookmark_color_bg_active
             container.update()
         return handle_bookmark
 
@@ -668,7 +673,6 @@ def my_volunteering_page(container, user):
                 {"_id": ObjectId(event_id)},
                 {"$pull": {"volunteers": str(user["_id"])}}
             )
-            
             
             success_dlg = ft.AlertDialog(
                 title=ft.Text("Success"),
@@ -691,22 +695,21 @@ def my_volunteering_page(container, user):
         {"volunteers": str(user["_id"])}
     ))
     
+    events_list = ft.ListView(spacing=10, expand=True)
+
     main_column = ft.Column(spacing=20)
     main_column.controls.append(
         ft.Text("My Volunteering Events", 
-               size=24, 
-               weight=ft.FontWeight.BOLD, 
-               color="white")
+            size=24, 
+            weight=ft.FontWeight.BOLD, 
+            color=text_color_title),
     )
 
     if not events:
         main_column.controls.append(
-            ft.Text("You haven't joined any events yet.", 
-                   color="white",
-                   size=16)
+            ft.Text("You haven't joined any events yet.", color=text_color_light, size=13)
         )
     else:
-        events_list = ft.ListView(spacing=10, expand=True)
         bookmarked_events = []
         other_events = []
         
@@ -714,7 +717,7 @@ def my_volunteering_page(container, user):
             is_bookmarked = str(event["_id"]) in user.get("bookmarked_events", [])
             bookmark_button = ft.IconButton(
                 icon="bookmark" if is_bookmarked else "bookmark_outline",
-                bgcolor="yellow" if is_bookmarked else "white",
+                bgcolor=bookmark_color_bg_active if is_bookmarked else bookmark_color_bg,
                 on_click=toggle_bookmark(event["_id"])
             )
 
@@ -722,7 +725,7 @@ def my_volunteering_page(container, user):
                 "Leave Event",
                 on_click=handle_leave_event(str(event["_id"])),
                 bgcolor="red",
-                color="white"
+                color="white", width=120, height=35
             )
 
             event_card = ft.Container(
@@ -744,7 +747,7 @@ def my_volunteering_page(container, user):
                             color="white"
                         ),
                         padding=10,
-                        border=ft.border.all(1, "#404040"),
+                        border=ft.border.all(1, "white"),
                         border_radius=5
                     ),
                     ft.Row([
@@ -752,7 +755,7 @@ def my_volunteering_page(container, user):
                     ], alignment=ft.MainAxisAlignment.END)
                 ]),
                 padding=20,
-                border=ft.border.all(1, "yellow" if is_bookmarked else "white"),
+                border=ft.border.all(3, brdr_color_bookmarked if is_bookmarked else brdr_color),
                 border_radius=10,
                 margin=5,
                 bgcolor="#2A2A2A"  
@@ -773,19 +776,17 @@ def my_volunteering_page(container, user):
             ft.Text("My Volunteering Events", 
                    size=24, 
                    weight=ft.FontWeight.BOLD, 
-                   color="white"),
+                   color=text_color_title),
             ft.Container(
-                content=events_list,
-                expand=True,
-                border=ft.border.all(1, "#404040"),
-                border_radius=10,
-                padding=10
-            )
-        ], expand=True),
-        padding=40,
-        bgcolor="#1E1E1E", 
-        expand=True
+            content=events_list,
+            expand=True,
+            border=ft.border.all(3, primary_color),
+            border_radius=10,
+            padding=10
+        )
+    ], expand=True)
     )
+    
     container.update()
 
 def settings_page(container, user):
@@ -852,12 +853,14 @@ def settings_page(container, user):
     btn_change = ft.ElevatedButton(
         "Change Password",
         on_click=change_password,
-        bgcolor="green",
-        color="white"
+        bgcolor="green", 
+        color="white", 
+        width=170, 
+        height=40
     )
 
     container.content = ft.Column([
-        ft.Text("Settings", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        ft.Text("Settings", size=24, weight=ft.FontWeight.BOLD, color=text_color_title),
         ft.Divider(height=20, color="transparent"),
         ft.Text("Change Password", size=16, weight=ft.FontWeight.BOLD, color="white"),
         current_password,
@@ -897,10 +900,7 @@ def bookmarked_posts_page(container, user):
     
     if not events:
         events_list.controls.append(
-            ft.Text("No bookmarked events.", 
-                   color="white",
-                   size=16,
-                   weight=ft.FontWeight.BOLD)
+            ft.Text("No bookmarked events.", color=text_color_light, size=13)
         )
     else:
         for event in events:
@@ -927,12 +927,12 @@ def bookmarked_posts_page(container, user):
                             color="white"
                         ),
                         padding=10,
-                        border=ft.border.all(1, "#404040"),
+                        border=ft.border.all(1, "white"),
                         border_radius=5
                     ),
                 ]),
                 padding=20,
-                border=ft.border.all(1, "yellow"),
+                border=ft.border.all(3, brdr_color_bookmarked),
                 border_radius=10,
                 margin=5,
                 bgcolor="#2A2A2A"
@@ -943,11 +943,11 @@ def bookmarked_posts_page(container, user):
         ft.Text("Bookmarked Events", 
                size=24, 
                weight=ft.FontWeight.BOLD, 
-               color="white"),
+               color=text_color_title),
         ft.Container(
             content=events_list,
             expand=True,
-            border=ft.border.all(1, "#404040"),
+            border=ft.border.all(3, primary_color),
             border_radius=10,
             padding=10
         )
@@ -1026,41 +1026,41 @@ def user_profile_page(container, user):
         dialog.open = False
         container.page.update()
 
-    # Create the layout
     container.content = ft.Column([
-        ft.Text("My Profile", size=24, weight=ft.FontWeight.BOLD, color="white"),
+        ft.Text("My Profile", size=24, weight=ft.FontWeight.BOLD, color=text_color_title),
         ft.Divider(height=20, color="transparent"),
         
         # Personal Information Section
-        ft.Text("Personal Information", size=16, weight=ft.FontWeight.BOLD, color="white"),
+        ft.Text("Personal Information", size=16, weight=ft.FontWeight.BOLD, color=text_color),
         first_name,
         last_name,
         ft.Divider(height=20, color="transparent"),
         
         # Location Information Section
-        ft.Text("Location", size=16, weight=ft.FontWeight.BOLD, color="white"),
+        ft.Text("Location", size=16, weight=ft.FontWeight.BOLD, color=text_color),
         country,
         city,
         ft.Divider(height=20, color="transparent"),
         
         # Account Information Section (read-only)
-        ft.Text("Account Information", size=16, weight=ft.FontWeight.BOLD, color="white"),
-        ft.Text(f"Email: {user['email']}", color="white"),
-        ft.Text(f"Role: {user['role'].capitalize()}", color="white"),
+        ft.Text("Account Information", size=16, weight=ft.FontWeight.BOLD, color=text_color),
+        ft.Text(f"Email: {user['email']}", color=text_color),
+        ft.Text(f"Role: {user['role'].capitalize()}", color=text_color),
         ft.Divider(height=20, color="transparent"),
         
         # Save Button
         ft.ElevatedButton(
-            "Save Changes",
-            on_click=save_changes,
-            bgcolor="green",
-            color="white",
-            width=200
+            "Save Changes", 
+            on_click=save_changes, 
+            bgcolor="green", 
+            color="white", 
+            width=170, 
+            height=40
         ),
         
         status_text
     ],
-    alignment=ft.MainAxisAlignment.START,
+    alignment=ft.MainAxisAlignment.CENTER,
     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
     spacing=10)
     
