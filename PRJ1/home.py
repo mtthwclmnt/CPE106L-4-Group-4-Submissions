@@ -1209,10 +1209,11 @@ def user_profile_page(container, user):
     spacing=10)
     
     container.update()
+    
 def logout_user(page):
     # Handle logout logic herex
     page.title = "Logged Out"
     page.clean()  
-    main(page)  
+    main(page)
 
 ft.app(target=main)
