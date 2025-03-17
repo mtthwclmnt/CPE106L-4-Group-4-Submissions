@@ -961,16 +961,12 @@ def settings_page(container, user):
     # Form fields
     current_password = ft.TextField(
         label="Current Password *",
-        password=True,
-        width=300,
-        border_color="white"
+        width=300, border_radius=12, label_style=label_style_text, border_color=primary_color, password=True, can_reveal_password=True
     )
 
     new_password = ft.TextField(
         label="New Password *",
-        password=True,
-        width=300,
-        border_color="white"
+        width=300, border_radius=12, label_style=label_style_text, border_color=primary_color, password=True, can_reveal_password=True
     )
 
     # Change password button
