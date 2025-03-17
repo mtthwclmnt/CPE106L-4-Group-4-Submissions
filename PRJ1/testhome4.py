@@ -373,51 +373,86 @@ def home_page(page, user):
     
     page.add(layout)
     page.update()
+
 def create_event_page(container, user):
     def submit_event(e):
-        if not all([name.value, date.value, address.value]):
-            container.page.show_snack_bar(
-                ft.SnackBar(
-                    content=ft.Text("Please fill all required fields"),
-                    bgcolor="red",
-                    action="Dismiss"
-                )
+        errors = False
+        date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+        required_fields = [name, date, address]
+
+        # Check for empty fields
+        for field in required_fields:
+            if not field.value.strip():
+                field.border_color = "red"
+                field.error_text = "This field is required"
+                errors = True
+            else:
+                field.border_color = None
+                field.error_text = None
+
+        # Validate date format
+        if date.value.strip():
+            if not date_pattern.match(date.value):
+                date.border_color = "red"
+                date.error_text = "Date must be in YYYY-MM-DD format"
+                errors = True
+            else:
+                date.border_color = None
+                date.error_text = None
+
+        # If errors exist, update UI and stop submission
+        if errors:
+            for field in required_fields:
+                field.update()
+            snack_bar = ft.SnackBar(
+                content=ft.Text("Please correct the highlighted fields."),
+                bgcolor="red",
+                action="Dismiss"
             )
+            container.page.snack_bar = snack_bar
+            snack_bar.open = True
+            container.page.update()
             return
 
+        # Save event to database
         new_event = {
             "name": name.value,
             "date": date.value,
             "address": address.value,
-            "description": description.value,  
+            "description": description.value,
             "organizer_id": str(user["_id"]),
             "organizer_name": f"{user['first_name']} {user['last_name']}",
             "volunteers": []
         }
-        
+
         events_collection.insert_one(new_event)
-        
-       
+
+        # Success dialog
         def close_dlg(e):
             dlg.open = False
             container.page.update()
-            
+
         dlg = ft.AlertDialog(
             title=ft.Text("Success!"),
             content=ft.Text("Event created successfully!"),
-            actions=[
-                ft.TextButton("OK", on_click=close_dlg)
-            ]
+            actions=[ft.TextButton("OK", on_click=close_dlg)]
         )
-        
+
         container.page.dialog = dlg
         dlg.open = True
         container.page.update()
-        
-     
-        name.value = date.value = address.value = description.value = ""
+
+        # Reset fields after successful submission
+        for field in [name, date, address, description]:
+            field.value = ""
+            field.border_color = None
+            field.error_text = None
+            field.update()
+
         container.update()
 
+    # Form fields
     name = ft.TextField(label="Event Name *", width=300, label_style=label_style_text)
     date = ft.TextField(label="Event Date (YYYY-MM-DD) *", width=300, label_style=label_style_text)
     address = ft.TextField(label="Event Address *", width=300, label_style=label_style_text)
@@ -429,7 +464,8 @@ def create_event_page(container, user):
         max_lines=5,
         label_style=label_style_text
     )
-    
+
+    # UI layout
     container.content = ft.Column([
         ft.Text("Create New Event", size=24, weight=ft.FontWeight.BOLD, color=text_color),
         name,
@@ -439,7 +475,7 @@ def create_event_page(container, user):
         ft.ElevatedButton("Create Event", on_click=submit_event, bgcolor="green", color="white", width=170, height=40)
     ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20)
     container.update()
-
+    
 def available_events_page(container, user):
     def join_event(event_id):
         def handle_join(e):
@@ -845,16 +881,30 @@ def my_volunteering_page(container, user):
 
 def settings_page(container, user):
     def change_password(e):
-        if not current_password.value:
-            error_text.value = "Please enter your current password"
-            error_text.color = "red"
-            container.update()
-            return
-            
-        if not new_password.value:
-            error_text.value = "Please enter a new password"
-            error_text.color = "red"
-            container.update()
+        errors = False
+
+        # Check for empty fields
+        for field in [current_password, new_password]:
+            if not field.value.strip():
+                field.border_color = "red"
+                field.error_text = "This field is required"
+                errors = True
+            else:
+                field.border_color = None
+                field.error_text = None
+
+        # Stop if errors exist
+        if errors:
+            for field in [current_password, new_password]:
+                field.update()
+            snack_bar = ft.SnackBar(
+                content=ft.Text("Please fill in the required fields."),
+                bgcolor="red",
+                action="Dismiss"
+            )
+            container.page.snack_bar = snack_bar
+            snack_bar.open = True
+            container.page.update()
             return
 
         # Verify current password
@@ -864,9 +914,18 @@ def settings_page(container, user):
         })
 
         if not user_check:
-            error_text.value = "Current password is incorrect"
-            error_text.color = "red"
-            container.update()
+            current_password.border_color = "red"
+            current_password.error_text = "Current password is incorrect"
+            current_password.update()
+
+            snack_bar = ft.SnackBar(
+                content=ft.Text("Current password is incorrect."),
+                bgcolor="red",
+                action="Dismiss"
+            )
+            container.page.snack_bar = snack_bar
+            snack_bar.open = True
+            container.page.update()
             return
 
         # Update password in database
@@ -875,35 +934,46 @@ def settings_page(container, user):
             {"$set": {"password": new_password.value}}
         )
 
-        
-        error_text.value = "Password changed successfully!"
-        error_text.color = "green"
-        
-        # Clear password fields
-        current_password.value = ""
-        new_password.value = ""
+        # Success message
+        success_dialog = ft.AlertDialog(
+            title=ft.Text("Success!"),
+            content=ft.Text("Password changed successfully!"),
+            actions=[ft.TextButton("OK", on_click=lambda e: close_dialog())]
+        )
+
+        def close_dialog():
+            success_dialog.open = False
+            container.page.update()
+
+        container.page.dialog = success_dialog
+        success_dialog.open = True
+        container.page.update()
+
+        # Clear fields after success
+        for field in [current_password, new_password]:
+            field.value = ""
+            field.border_color = None
+            field.error_text = None
+            field.update()
+
         container.update()
 
+    # Form fields
     current_password = ft.TextField(
-        label="Current Password",
+        label="Current Password *",
         password=True,
         width=300,
         border_color="white"
     )
-    
+
     new_password = ft.TextField(
-        label="New Password",
+        label="New Password *",
         password=True,
         width=300,
         border_color="white"
     )
 
-    error_text = ft.Text(
-        "",  # Initially empty
-        size=14,
-        weight=ft.FontWeight.BOLD
-    )
-
+    # Change password button
     btn_change = ft.ElevatedButton(
         "Change Password",
         on_click=change_password,
@@ -913,20 +983,20 @@ def settings_page(container, user):
         height=40
     )
 
+    # Layout
     container.content = ft.Column([
         ft.Text("Settings", size=24, weight=ft.FontWeight.BOLD, color=text_color_title),
         ft.Divider(height=20, color="transparent"),
         ft.Text("Change Password", size=16, weight=ft.FontWeight.BOLD, color="white"),
         current_password,
         new_password,
-        error_text, 
         btn_change
     ], 
     alignment=ft.MainAxisAlignment.CENTER,
     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
     spacing=20)
-    
     container.update()
+
 def bookmarked_posts_page(container, user):
     def toggle_bookmark(event_id):
         def handle_bookmark(e):
