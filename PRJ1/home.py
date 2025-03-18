@@ -477,7 +477,7 @@ def create_event_page(container, user):
     container.update()
 
 def available_events_page(container, user):
-    def refresh_page(e):
+    def refresh_page(e=None):
         available_events_page(container, user)
         
         success_dlg = ft.AlertDialog(
@@ -494,24 +494,24 @@ def available_events_page(container, user):
     def close_dialog(dialog):
         dialog.open = False
         container.page.update()
+
     def join_event(event_id):
         def handle_join(e):
+            # Add the user to the event's volunteers list
             events_collection.update_one(
                 {"_id": event_id},
                 {"$addToSet": {"volunteers": str(user["_id"])}}
             )
             
-           
-            def close_dlg(e):
-                dlg.open = False
-                container.page.update()
-                available_events_page(container, user)  # Refresh the page
-                
+            # Refresh the page immediately after joining the event
+            refresh_page()
+            
+            # Show a success dialog
             dlg = ft.AlertDialog(
                 title=ft.Text("Success!"),
                 content=ft.Text("You have successfully joined the event!"),
                 actions=[
-                    ft.TextButton("OK", on_click=close_dlg)
+                    ft.TextButton("OK", on_click=lambda e: close_dialog(dlg))
                 ]
             )
             
@@ -521,6 +521,7 @@ def available_events_page(container, user):
             
         return handle_join
 
+    # Get events where the user is not a volunteer
     events = list(events_collection.find(
         {"volunteers": {"$nin": [str(user["_id"])]}}
     ))
@@ -562,6 +563,7 @@ def available_events_page(container, user):
             )
             events_list.controls.append(event_card)
 
+    # Create main container 
     container.content = ft.Column([
         ft.Row([
             ft.Text("Available Events", size=24, weight=ft.FontWeight.BOLD, color=text_color_title, expand=True),
@@ -583,23 +585,14 @@ def available_events_page(container, user):
     container.update()
 
 def my_events_page(container, user):
-    def refresh_page(e):
+    def refresh_page(e=None):
         my_events_page(container, user)
-        
-        success_dlg = ft.AlertDialog(
-            title=ft.Text("Success"),
-            content=ft.Text("Page refreshed successfully!"),
-            actions=[
-                ft.TextButton("OK", on_click=lambda e: close_dialog(success_dlg))
-            ]
-        )
-        container.page.dialog = success_dlg
-        success_dlg.open = True
         container.page.update()
     
     def close_dialog(dialog):
         dialog.open = False
         container.page.update()
+
     def toggle_bookmark(event_id):
         def handle_bookmark(e):
             if str(event_id) in user.get("bookmarked_events", []):
@@ -631,16 +624,16 @@ def my_events_page(container, user):
                 title=ft.Text("Success"),
                 content=ft.Text("Event has been permanently deleted!"),
                 actions=[
-                    ft.TextButton("OK", on_click=lambda e: refresh_page())
+                    ft.TextButton("OK", on_click=lambda e: close_dialog(success_dlg))
                 ]
             )
             container.page.dialog = success_dlg
             success_dlg.open = True
             container.page.update()
-        
-        def refresh_page():
-            my_events_page(container, user)
             
+            # Refresh the page after deletion
+            refresh_page()
+        
         return handle_click
 
     events = list(events_collection.find({"organizer_id": str(user["_id"])}))
@@ -733,7 +726,7 @@ def my_events_page(container, user):
     container.update()
 
 def my_volunteering_page(container, user):
-    def refresh_page(e):
+    def refresh_page(e=None):
         my_volunteering_page(container, user)
         
         success_dlg = ft.AlertDialog(
@@ -750,6 +743,7 @@ def my_volunteering_page(container, user):
     def close_dialog(dialog):
         dialog.open = False
         container.page.update()
+
     def toggle_bookmark(event_id):
         def handle_bookmark(e):
             if str(event_id) in user.get("bookmarked_events", []):
@@ -771,6 +765,7 @@ def my_volunteering_page(container, user):
                 e.control.icon = "bookmark"
                 e.control.bgcolor = bookmark_color_bg_active
             container.update()
+            refresh_page()  # Refresh the page after toggling bookmark
         return handle_bookmark
 
     def handle_leave_event(event_id):
@@ -785,16 +780,14 @@ def my_volunteering_page(container, user):
                 title=ft.Text("Success"),
                 content=ft.Text("You have left the event successfully!"),
                 actions=[
-                    ft.TextButton("OK", on_click=lambda e: refresh_page())
+                    ft.TextButton("OK", on_click=lambda e: close_dialog(success_dlg))
                 ]
             )
             container.page.dialog = success_dlg
             success_dlg.open = True
             container.page.update()
+            refresh_page()  # Refresh the page after leaving the event
         
-        def refresh_page():
-            my_volunteering_page(container, user)
-            
         return handle_click
 
     # Get events where the user is a volunteer
