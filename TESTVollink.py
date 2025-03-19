@@ -28,6 +28,9 @@ text_hov_color = primary_color
 label_style_text = ft.TextStyle(color=text_color, italic=True)
 button_style_back = ft.ButtonStyle(color=text_color)
 
+error_text_style = ft.TextStyle(color="#8B0000")
+error_color = "8B0000"
+
 def main(page: ft.Page):
     page.title = "User Authentication"
     page.bgcolor = background_color
@@ -66,9 +69,6 @@ def signup_page(page):
     def go_back(e):
         page.clean()
         main(page)
-    
-    error_text_style = ft.TextStyle(color="#8B0000")
-    error_color = "8B0000"
 
     def submit_signup(e):
         errors = False
@@ -77,7 +77,7 @@ def signup_page(page):
         for field in [first_name, last_name, email, password]:
             if not field.value.strip():
                 field.border_color = error_color
-                field.error_text = "This field is required"
+                field.error_text = "This field is required."
                 field.error_style = error_text_style
                 errors = True
             else:
@@ -157,7 +157,7 @@ def login_page(page):
         for field in required_fields:
             if not field.value.strip():
                 field.border_color = "#8B0000"
-                field.error_text = "This field is required"
+                field.error_text = "This field is required."
                 field.error_style = error_text_style
                 errors = True
             else:
@@ -253,9 +253,9 @@ def role_selection_page(page, user):
             home_page(page, user)  
         return handle
 
-    title = ft.Text("Select Your Role", size=30, weight=ft.FontWeight.BOLD, color="white")
-    btn_organizer = ft.ElevatedButton("Organizer", on_click=select_role("organizer"), bgcolor="green", color="white", width=200)
-    btn_volunteer = ft.ElevatedButton("Volunteer", on_click=select_role("volunteer"), bgcolor="green", color="white", width=200)
+    title = ft.Text("Select Your Role", size=30, weight=ft.FontWeight.BOLD, color=text_color_title)
+    btn_organizer = ft.ElevatedButton("Organizer", on_click=select_role("organizer"), bgcolor=primary_color, color=text_color, width=170, height=40)
+    btn_volunteer = ft.ElevatedButton("Volunteer", on_click=select_role("volunteer"), bgcolor=primary_color, color=text_color, width=170, height=40)
 
     content = ft.Column([
         title, btn_organizer, btn_volunteer
@@ -397,8 +397,9 @@ def create_event_page(container, user):
         # Check for empty fields
         for field in required_fields:
             if not field.value.strip():
-                field.border_color = "red"
-                field.error_text = "This field is required"
+                field.border_color = error_color
+                field.error_text = "This field is required."
+                field.error_style = error_text_style
                 errors = True
             else:
                 field.border_color = None
@@ -407,8 +408,9 @@ def create_event_page(container, user):
         # Validate date format
         if date.value.strip():
             if not date_pattern.match(date.value):
-                date.border_color = "red"
+                date.border_color = error_color
                 date.error_text = "Date must be in YYYY-MM-DD format"
+                date.error_style = error_text_style
                 errors = True
             else:
                 date.border_color = None
@@ -466,16 +468,18 @@ def create_event_page(container, user):
         container.update()
 
     # Form fields
-    name = ft.TextField(label="Event Name *", width=300, label_style=label_style_text)
-    date = ft.TextField(label="Event Date (YYYY-MM-DD) *", width=300, label_style=label_style_text)
-    address = ft.TextField(label="Event Address *", width=300, label_style=label_style_text)
+    name = ft.TextField(label="Event Name *", width=300, border_radius=12, label_style=label_style_text, color=text_color)
+    date = ft.TextField(label="Event Date (YYYY-MM-DD) *", width=300, border_radius=12, label_style=label_style_text, color=text_color)
+    address = ft.TextField(label="Event Address *", width=300, border_radius=12, label_style=label_style_text, color=text_color)
     description = ft.TextField(
         label="Event Description",
         width=300,
+        border_radius=12,
         multiline=True,
         min_lines=3,
         max_lines=5,
-        label_style=label_style_text
+        label_style=label_style_text,
+        color=text_color
     )
 
     # UI layout
@@ -627,6 +631,8 @@ def my_events_page(container, user):
                 e.control.icon = "bookmark"
                 e.control.bgcolor = bookmark_color_bg_active
             container.update()
+            # Refresh the page after toggling the bookmark
+            refresh_page()
         return handle_bookmark
 
     def handle_delete_event(event_id):
@@ -1081,8 +1087,9 @@ def settings_page(container, user):
         # Check for empty fields
         for field in [current_password, new_password]:
             if not field.value.strip():
-                field.border_color = "red"
-                field.error_text = "This field is required"
+                field.border_color = error_color
+                field.error_text = "This field is required."
+                field.error_style = error_text_style
                 errors = True
             else:
                 field.border_color = None
@@ -1109,8 +1116,9 @@ def settings_page(container, user):
         })
 
         if not user_check:
-            current_password.border_color = "red"
-            current_password.error_text = "Current password is incorrect"
+            current_password.border_color = error_color
+            current_password.error_text = "Current password is incorrect."
+            current_password.error_style = error_text_style
             current_password.update()
 
             snack_bar = ft.SnackBar(
@@ -1155,24 +1163,21 @@ def settings_page(container, user):
 
     # Form fields
     current_password = ft.TextField(
-        label="Current Password *", width=300, border_radius=12, bgcolor=primary_color, border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
+        label="Current Password *", width=300, border_radius=12, label_style=label_style_text, color=text_color, password=True, can_reveal_password=True
     )
 
     new_password = ft.TextField(
-        label="New Password *", width=300, border_radius=12, bgcolor=primary_color,  border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
+        label="New Password *", width=300, border_radius=12, label_style=label_style_text, color=text_color, password=True, can_reveal_password=True
     )
 
     # Change password button
-    btn_change = ft.OutlinedButton(
-    text="Change Password",
-    on_click=change_password,
-    width=170,
-    height=40,
-    style=ft.ButtonStyle(
-        color=primary_color,
-        side=ft.BorderSide(1, primary_color),
-        shape=ft.RoundedRectangleBorder(radius=10),
-    )
+    btn_change = ft.ElevatedButton(
+        text="Change Password",
+        on_click=change_password, 
+        bgcolor="#8e9859", 
+        color="white", 
+        width=170, 
+        height=40
 )
 
     # Layout
@@ -1277,32 +1282,36 @@ def user_profile_page(container, user):
         label="First Name",
         value=user['first_name'],
         width=300,
-        border_color="#ba804d"
-        # text_color should be removed
+        border_radius=12, 
+        label_style=label_style_text, 
+        color=text_color
     )
     
     last_name = ft.TextField(
         label="Last Name",
         value=user['last_name'],
         width=300,
-        border_color="#ba804d"
-        # text_color should be removed
+        border_radius=12, 
+        label_style=label_style_text, 
+        color=text_color
     )
     
     country = ft.TextField(
         label="Country",
         value=user.get('country', ''),  
         width=300,
-        border_color="#ba804d"
-        # text_color should be removed
+        border_radius=12, 
+        label_style=label_style_text, 
+        color=text_color
     )
     
     city = ft.TextField(
         label="City/Province",
         value=user.get('city', ''),  
         width=300,
-        border_color="#ba804d"
-        # text_color should be removed
+        border_radius=12, 
+        label_style=label_style_text, 
+        color=text_color
     )
     
     # Status text for showing success/error messages
