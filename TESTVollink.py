@@ -618,6 +618,8 @@ def my_events_page(container, user):
                 e.control.icon = "bookmark"
                 e.control.bgcolor = bookmark_color_bg_active
             container.update()
+            # Refresh the page after toggling the bookmark
+            refresh_page()
         return handle_bookmark
 
     def handle_delete_event(event_id):
@@ -1146,11 +1148,11 @@ def settings_page(container, user):
 
     # Form fields
     current_password = ft.TextField(
-        label="Current Password *", width=300, border_radius=12, bgcolor=primary_color, border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
+        label="Current Password *", width=300, border_radius=12, border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
     )
 
     new_password = ft.TextField(
-        label="New Password *", width=300, border_radius=12, bgcolor=primary_color,  border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
+        label="New Password *", width=300, border_radius=12, border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
     )
 
     # Change password button
@@ -1169,7 +1171,7 @@ def settings_page(container, user):
     # Layout
     container.content = ft.Column([
         ft.Text("Settings", size=24, weight=ft.FontWeight.BOLD, color=text_color_title),
-        ft.Divider(height=20, color="transparent"),
+        ft.Divider(height=10, color="transparent"),
         ft.Text("Change Password", size=16, weight=ft.FontWeight.BOLD, color=primary_color),
         current_password,
         new_password,
