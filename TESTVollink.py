@@ -16,6 +16,7 @@ background_color = "#f2efe8"
 primary_color = "#8e9859"
 text_color = "#434134"
 text_color_light = "#8e9859"
+secondary_color = "#b4bb8c"
 text_color_title = "#ba804d"
 brdr_color = "#8e9859"
 brdr_color_bookmarked = "green"
@@ -72,7 +73,7 @@ def signup_page(page):
         
         for field in [first_name, last_name, email, password]:
             if not field.value.strip():
-                field.border_color = "red"
+                field.border_color = "#8B0000"
                 field.error_text = "This field is required"
                 errors = True
             else:
@@ -80,7 +81,7 @@ def signup_page(page):
                 field.error_text = None
         
         if email.value.strip() and not validate_email(email.value):
-            email.border_color = "red"
+            email.border_color = "#8B0000"
             email.error_text = "Enter a valid email (sample@email.com)"
             errors = True
         
@@ -148,7 +149,7 @@ def login_page(page):
         # Check for empty fields
         for field in required_fields:
             if not field.value.strip():
-                field.border_color = "red"
+                field.border_color = "#8B0000"
                 field.error_text = "This field is required"
                 errors = True
             else:
@@ -158,7 +159,7 @@ def login_page(page):
         # Check email format
         if email.value.strip():
             if not validate_email(email.value):
-                email.border_color = "red"
+                email.border_color = "#8B0000"
                 email.error_text = "Enter a valid email (sample@email.com)"
                 errors = True
             else:
@@ -339,12 +340,12 @@ def home_page(page, user):
                 ),
                 on_click=lambda e, text=text: navigate_to(text),
                 style=ft.ButtonStyle(
-                    bgcolor={"": primary_color, "hovered": text_hov_color},  # Background color & hover effect
+                    bgcolor={"": secondary_color, "hovered": text_hov_color},  # Background color & hover effect
                     padding=15,  # Adjust spacing inside the button
                     shape=ft.RoundedRectangleBorder(radius=8)  # Optional rounded corners
                 )
             ),
-            bgcolor=primary_color,  # Default background color for consistency
+            bgcolor=secondary_color,  # Default background color for consistency
             border_radius=8,  # Rounded corners
             margin=ft.margin.only(bottom=5),  # Spacing between items
             shadow=ft.BoxShadow(
@@ -475,7 +476,7 @@ def create_event_page(container, user):
         date,
         address,
         description,
-        ft.ElevatedButton("Create Event", on_click=submit_event, bgcolor="#ba804d", color="white", width=170, height=40)
+        ft.ElevatedButton("Create Event", on_click=submit_event, bgcolor="#8e9859", color="white", width=170, height=40)
     ], alignment=ft.MainAxisAlignment.CENTER, horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=20)
     container.update()
 
@@ -951,7 +952,7 @@ def statistics_page(container, user):
                     labels=[
                         ft.ChartAxisLabel(
                             value=i,
-                            label=ft.Text(str(i), size=14, weight=ft.FontWeight.BOLD, color="green")
+                            label=ft.Text(str(i), size=14, weight=ft.FontWeight.BOLD, color="#8e9859")
                         ) for i in range(0, max(volunteer_counts) + 1)
                     ],
                     labels_size=40,
@@ -961,7 +962,7 @@ def statistics_page(container, user):
                     labels=[
                         ft.ChartAxisLabel(
                             value=i,
-                            label=ft.Text(str(i + 1), size=12, weight=ft.FontWeight.BOLD, color="green")  # X-axis values as 1, 2, 3, ...
+                            label=ft.Text(str(i + 1), size=12, weight=ft.FontWeight.BOLD, color="#8e9859")  # X-axis values as 1, 2, 3, ...
                         ) for i in range(len(event_labels))
                     ],
                     labels_size=32,
@@ -1019,7 +1020,7 @@ def statistics_page(container, user):
             legacy_table = ft.Column(
                 controls=[
                     ft.Row([
-                        ft.Text(f"{i + 1}: {event_labels[i]}", size=14, weight=ft.FontWeight.BOLD, color="green") 
+                        ft.Text(f"{i + 1}: {event_labels[i]}", size=14, weight=ft.FontWeight.BOLD, color="#8e9859") 
                         for i in range(len(events))
                     ], alignment=ft.MainAxisAlignment.CENTER)
                 ],
@@ -1267,30 +1268,34 @@ def user_profile_page(container, user):
         label="First Name",
         value=user['first_name'],
         width=300,
-        border_color="#8e9859"
+        border_color="#ba804d"
+        # text_color should be removed
     )
     
     last_name = ft.TextField(
         label="Last Name",
         value=user['last_name'],
         width=300,
-        border_color="#8e9859"
+        border_color="#ba804d"
+        # text_color should be removed
     )
     
     country = ft.TextField(
         label="Country",
         value=user.get('country', ''),  
         width=300,
-        border_color="#8e9859"
+        border_color="#ba804d"
+        # text_color should be removed
     )
     
     city = ft.TextField(
         label="City/Province",
         value=user.get('city', ''),  
         width=300,
-        border_color="#8e9859"
+        border_color="#ba804d"
+        # text_color should be removed
     )
-
+    
     # Status text for showing success/error messages
     status_text = ft.Text("", color="#ba804d")
 
@@ -1314,7 +1319,7 @@ def user_profile_page(container, user):
 
        
         status_text.value = "Profile updated successfully!"
-        status_text.color = "green"
+        status_text.color = "#8e9859"
         container.update()
 
         
@@ -1359,7 +1364,7 @@ def user_profile_page(container, user):
         ft.ElevatedButton(
             "Save Changes", 
             on_click=save_changes, 
-            bgcolor="green", 
+            bgcolor="#8e9859", 
             color="white", 
             width=170, 
             height=40
