@@ -67,26 +67,31 @@ def signup_page(page):
         page.clean()
         main(page)
     
+    error_text_style = ft.TextStyle(color="#8B0000")
+    error_color = "8B0000"
+
     def submit_signup(e):
         errors = False
         required_fields = [first_name, last_name, email, password]
         
         for field in [first_name, last_name, email, password]:
             if not field.value.strip():
-                field.border_color = "#8B0000"
+                field.border_color = error_color
                 field.error_text = "This field is required"
+                field.error_style = error_text_style
                 errors = True
             else:
                 field.border_color = None
                 field.error_text = None
         
         if email.value.strip() and not validate_email(email.value):
-            email.border_color = "#8B0000"
+            email.border_color = error_color
             email.error_text = "Enter a valid email (sample@email.com)"
+            email.error_style = error_text_style
             errors = True
         
         if errors:
-            page.snack_bar = ft.SnackBar(content=ft.Text("Fill in the * required fields."), bgcolor="red")
+            page.snack_bar = ft.SnackBar(content=ft.Text("Fill in the * required fields.", color="white"), bgcolor="red")
             page.snack_bar.open = True
             page.update()
             return
@@ -95,6 +100,7 @@ def signup_page(page):
         if users_collection.find_one({"email": email.value}):
             email.border_color = "red"
             email.error_text = "Email already exists!"
+            email.error_style = error_text_style
             page.update()
             return
 
@@ -142,6 +148,7 @@ def login_page(page):
         page.clean()
         main(page)
     
+    error_text_style = ft.TextStyle(color="#8B0000")
     def submit_login(e):
         errors = False
         required_fields = [email, password]
@@ -151,6 +158,7 @@ def login_page(page):
             if not field.value.strip():
                 field.border_color = "#8B0000"
                 field.error_text = "This field is required"
+                field.error_style = error_text_style
                 errors = True
             else:
                 field.border_color = None
@@ -161,6 +169,7 @@ def login_page(page):
             if not validate_email(email.value):
                 email.border_color = "#8B0000"
                 email.error_text = "Enter a valid email (sample@email.com)"
+                email.error_style = error_text_style
                 errors = True
             else:
                 # Reset email field error if the format is valid
@@ -168,7 +177,7 @@ def login_page(page):
                 email.error_text = None
 
         if errors:
-            page.snack_bar = ft.SnackBar(content=ft.Text("Fill in the * required fields."), bgcolor="red")
+            page.snack_bar = ft.SnackBar(content=ft.Text("Fill in the * required fields.", color="white"), bgcolor="red")
             page.snack_bar.open = True
             page.update()
             return
@@ -618,8 +627,6 @@ def my_events_page(container, user):
                 e.control.icon = "bookmark"
                 e.control.bgcolor = bookmark_color_bg_active
             container.update()
-            # Refresh the page after toggling the bookmark
-            refresh_page()
         return handle_bookmark
 
     def handle_delete_event(event_id):
@@ -1148,11 +1155,11 @@ def settings_page(container, user):
 
     # Form fields
     current_password = ft.TextField(
-        label="Current Password *", width=300, border_radius=12, border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
+        label="Current Password *", width=300, border_radius=12, bgcolor=primary_color, border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
     )
 
     new_password = ft.TextField(
-        label="New Password *", width=300, border_radius=12, border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
+        label="New Password *", width=300, border_radius=12, bgcolor=primary_color,  border_color=brdr_color, label_style=label_style_text, color="#f2efe8", password=True, can_reveal_password=True
     )
 
     # Change password button
@@ -1171,7 +1178,7 @@ def settings_page(container, user):
     # Layout
     container.content = ft.Column([
         ft.Text("Settings", size=24, weight=ft.FontWeight.BOLD, color=text_color_title),
-        ft.Divider(height=10, color="transparent"),
+        ft.Divider(height=20, color="transparent"),
         ft.Text("Change Password", size=16, weight=ft.FontWeight.BOLD, color=primary_color),
         current_password,
         new_password,
